@@ -9,7 +9,7 @@
 @layer base {
   :root {
     /* Kid-friendly Background Colors */
-    --background: 210 100% 98%;
+    --background: 210 40% 98%;
     --foreground: 220 15% 25%;
     
     /* Playful Card Colors */
@@ -17,16 +17,16 @@
     --card-foreground: 220 15% 25%;
     
     /* Kid-friendly Primary Colors - Soft Teal */
-    --primary: 180 65% 55%;
+    --primary: 174 84% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 180 75% 70%;
+    --primary-glow: 174 84% 70%;
     
     /* Warm Secondary - Soft Coral */
     --secondary: 15 100% 80%;
     --secondary-foreground: 220 15% 25%;
     
     /* Fun Accent - Sunny Yellow */
-    --accent: 45 100% 75%;
+    --accent: 45 94% 76%;
     --accent-foreground: 220 15% 25%;
     
     /* Success - Soft Green */

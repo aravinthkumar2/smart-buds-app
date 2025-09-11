@@ -2,10 +2,12 @@ import { useState } from "react";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
 import { ChildDashboard } from "@/components/ChildDashboard";
 import { ReadingModule } from "@/components/ReadingModule";
+import { VideoModule } from "@/components/VideoModule";
+import { GameModule } from "@/components/GameModule";
 import { ParentDashboard } from "@/components/ParentDashboard";
 
 type UserRole = 'child' | 'parent' | 'teacher' | null;
-type CurrentView = 'welcome' | 'child-dashboard' | 'parent-dashboard' | 'teacher-dashboard' | 'reading' | 'writing' | 'math' | 'music';
+type CurrentView = 'welcome' | 'child-dashboard' | 'parent-dashboard' | 'teacher-dashboard' | 'reading' | 'video' | 'game' | 'writing' | 'math' | 'music';
 
 const Index = () => {
   const [userRole, setUserRole] = useState<UserRole>(null);
@@ -49,6 +51,12 @@ const Index = () => {
       
       case 'reading':
         return <ReadingModule onBack={handleBackToDashboard} />;
+      
+      case 'video':
+        return <VideoModule onBack={handleBackToDashboard} />;
+      
+      case 'game':
+        return <GameModule onBack={handleBackToDashboard} />;
       
       case 'writing':
       case 'math':

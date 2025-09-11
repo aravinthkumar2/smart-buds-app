@@ -1,196 +1,153 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { 
+  Play, 
   BookOpen, 
-  PenTool, 
-  Calculator, 
-  Music, 
+  Gamepad2, 
   Star, 
   Trophy,
-  Volume2,
-  Globe
+  Award,
+  Target
 } from "lucide-react";
-import learningIcons from "@/assets/learning-icons.jpg";
+import owlMascot from "@/assets/owl-mascot.jpg";
 
 interface ChildDashboardProps {
   onModuleSelect: (module: string) => void;
 }
 
 export const ChildDashboard = ({ onModuleSelect }: ChildDashboardProps) => {
-  const learningModules = [
+  const activityCards = [
+    {
+      id: 'video',
+      title: 'Watch & Learn',
+      description: 'Fun educational videos',
+      icon: Play,
+      bgGradient: 'gradient-primary',
+      progress: 65,
+    },
     {
       id: 'reading',
-      title: 'Reading Stories',
-      description: 'Listen to fun stories and learn new words!',
+      title: 'Reading Quiz',
+      description: 'Test your reading skills',
       icon: BookOpen,
-      progress: 65,
-      color: 'bg-primary',
-      bgGradient: 'gradient-primary',
-      completedLessons: 13,
-      totalLessons: 20,
-    },
-    {
-      id: 'writing',
-      title: 'Writing Practice',
-      description: 'Practice writing letters and words!',
-      icon: PenTool,
-      progress: 40,
-      color: 'bg-secondary',
       bgGradient: 'gradient-success',
-      completedLessons: 8,
-      totalLessons: 20,
-    },
-    {
-      id: 'math',
-      title: 'Math Puzzles',
-      description: 'Solve fun number puzzles and games!',
-      icon: Calculator,
-      progress: 30,
-      color: 'bg-magic',
-      bgGradient: 'gradient-magic',
-      completedLessons: 6,
-      totalLessons: 20,
-    },
-    {
-      id: 'music',
-      title: 'Music & Sounds',
-      description: 'Learn with songs and musical games!',
-      icon: Music,
       progress: 80,
-      color: 'bg-reward',
-      bgGradient: 'gradient-success',
-      completedLessons: 16,
-      totalLessons: 20,
+    },
+    {
+      id: 'game',
+      title: 'Learning Games',
+      description: 'Play and learn together',
+      icon: Gamepad2,
+      bgGradient: 'gradient-magic',
+      progress: 45,
     },
   ];
 
   const achievements = [
-    { title: 'Reading Star', icon: Star, color: 'text-yellow-500' },
-    { title: 'Math Genius', icon: Calculator, color: 'text-purple-500' },
-    { title: 'Writing Pro', icon: PenTool, color: 'text-green-500' },
+    { title: 'Reading Champion', icon: Star, count: 12 },
+    { title: 'Quiz Master', icon: Trophy, count: 8 },
+    { title: 'Game Winner', icon: Award, count: 15 },
   ];
 
   return (
-    <div className="min-h-screen p-4 md:p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="flex justify-center mb-4">
-            <img 
-              src={learningIcons} 
-              alt="Learning activities" 
-              className="w-20 h-20 object-cover rounded-full shadow-soft bounce-gentle"
-            />
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-2 font-fredoka">
-            Hi there, Superstar! 🌟
-          </h1>
-          <p className="text-lg text-muted-foreground font-inter">
-            Ready to learn something amazing today?
-          </p>
-          
-          {/* Language and Accessibility Controls */}
-          <div className="flex justify-center gap-4 mt-4">
-            <Button variant="outline" size="sm">
-              <Globe className="w-4 h-4" />
-              English
-            </Button>
-            <Button variant="outline" size="sm">
-              <Volume2 className="w-4 h-4" />
-              Read Aloud
-            </Button>
-          </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Top Avatar & Greeting */}
+      <div className="text-center pt-8 pb-6 px-4">
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden shadow-soft bounce-gentle">
+          <img 
+            src={owlMascot} 
+            alt="Learning buddy" 
+            className="w-full h-full object-cover"
+          />
         </div>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2 font-fredoka">
+          Hi there, Superstar! 🌟
+        </h1>
+        <p className="text-base text-muted-foreground font-inter">
+          Ready to learn something amazing today?
+        </p>
+      </div>
 
-        {/* Achievements Row */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-foreground font-fredoka flex items-center gap-2">
-            <Trophy className="w-6 h-6 text-yellow-500" />
-            Your Awesome Achievements!
-          </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {achievements.map((achievement, index) => {
-              const Icon = achievement.icon;
-              return (
-                <Badge 
-                  key={index} 
-                  className="flex items-center gap-2 py-2 px-4 text-sm font-medium whitespace-nowrap pulse-soft"
-                  variant="secondary"
-                >
-                  <Icon className={`w-4 h-4 ${achievement.color}`} />
-                  {achievement.title}
-                </Badge>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Learning Modules Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
-          {learningModules.map((module) => {
-            const Icon = module.icon;
+      {/* Activity Cards */}
+      <div className="flex-1 px-4 pb-4">
+        <div className="space-y-4 max-w-md mx-auto">
+          {activityCards.map((activity) => {
+            const Icon = activity.icon;
             
             return (
               <Card 
-                key={module.id}
-                className="card-interactive bg-card/80 backdrop-blur-sm border-2 border-transparent hover:border-primary/20"
-                onClick={() => onModuleSelect(module.id)}
+                key={activity.id}
+                className="card-interactive bg-card border-2 border-transparent hover:border-primary/20 min-h-[120px]"
+                onClick={() => onModuleSelect(activity.id)}
               >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className={`w-12 h-12 rounded-card ${module.bgGradient} flex items-center justify-center shadow-soft`}>
-                      <Icon className="w-6 h-6 text-white" />
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-16 h-16 rounded-card ${activity.bgGradient} flex items-center justify-center shadow-soft flex-shrink-0`}>
+                      <Icon className="w-8 h-8 text-white" />
                     </div>
-                    <Badge className="bg-success text-success-foreground">
-                      {module.completedLessons}/{module.totalLessons}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-xl font-fredoka text-foreground">
-                    {module.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 font-inter">
-                    {module.description}
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Progress</span>
-                      <span className="text-foreground font-medium">{module.progress}%</span>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-fredoka text-foreground mb-1">
+                        {activity.title}
+                      </h3>
+                      <p className="text-base text-muted-foreground font-inter mb-3">
+                        {activity.description}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <Progress value={activity.progress} className="flex-1 h-2" />
+                        <span className="text-sm font-medium text-foreground">
+                          {activity.progress}%
+                        </span>
+                      </div>
                     </div>
-                    <Progress value={module.progress} className="h-2" />
                   </div>
-                  
-                  <Button 
-                    variant="kid" 
-                    size="sm" 
-                    className="w-full mt-4"
-                  >
-                    Continue Learning! 
-                  </Button>
                 </CardContent>
               </Card>
             );
           })}
         </div>
+      </div>
 
-        {/* Daily Goal */}
-        <div className="mt-8">
-          <Card className="bg-gradient-to-r from-success/10 to-primary/10 border-success/20">
-            <CardContent className="p-6 text-center">
-              <h3 className="text-lg font-semibold mb-2 text-foreground font-fredoka">
-                Today's Goal 🎯
-              </h3>
-              <p className="text-muted-foreground mb-4 font-inter">
-                Complete 2 more activities to earn your daily star!
-              </p>
-              <Progress value={60} className="max-w-xs mx-auto h-3" />
-              <p className="text-sm text-muted-foreground mt-2">3 out of 5 activities completed</p>
-            </CardContent>
-          </Card>
+      {/* Bottom Bar - Rewards & Progress */}
+      <div className="bg-card border-t border-border px-4 py-4">
+        <div className="max-w-md mx-auto">
+          <div className="grid grid-cols-2 gap-4">
+            {/* Rewards Section */}
+            <div className="text-center">
+              <div className="flex justify-center mb-2">
+                <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center">
+                  <Trophy className="w-6 h-6 text-accent-foreground" />
+                </div>
+              </div>
+              <h4 className="text-lg font-fredoka text-foreground mb-1">Rewards</h4>
+              <div className="flex justify-center gap-1">
+                {achievements.map((achievement, index) => {
+                  const Icon = achievement.icon;
+                  return (
+                    <div key={index} className="flex items-center gap-1">
+                      <Icon className="w-4 h-4 text-accent" />
+                      <span className="text-sm font-medium text-foreground">{achievement.count}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Progress Section */}
+            <div className="text-center">
+              <div className="flex justify-center mb-2">
+                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+                  <Target className="w-6 h-6 text-primary-foreground" />
+                </div>
+              </div>
+              <h4 className="text-lg font-fredoka text-foreground mb-1">Progress</h4>
+              <div className="space-y-1">
+                <Progress value={75} className="h-2" />
+                <p className="text-sm text-muted-foreground">Daily Goal: 75%</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
