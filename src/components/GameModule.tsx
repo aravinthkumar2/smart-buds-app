@@ -12,6 +12,9 @@ import {
   Play
 } from "lucide-react";
 import { useState } from "react";
+import { WordMatchingGame } from "./games/WordMatchingGame";
+import { NumberPuzzleGame } from "./games/NumberPuzzleGame";
+import { ColorMemoryGame } from "./games/ColorMemoryGame";
 
 interface GameModuleProps {
   onBack: () => void;
@@ -21,6 +24,11 @@ export const GameModule = ({ onBack }: GameModuleProps) => {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [score, setScore] = useState(150);
   const [streak, setStreak] = useState(5);
+  const [gameScores, setGameScores] = useState<Record<string, number>>({
+    'word-match': 95,
+    'number-puzzle': 87,
+    'music-rhythm': 92
+  });
 
   const games = [
     {
@@ -87,34 +95,55 @@ export const GameModule = ({ onBack }: GameModuleProps) => {
 
   const startGame = (gameId: string) => {
     setSelectedGame(gameId);
-    // Game logic would go here
-    setTimeout(() => {
-      setScore(score + 25);
-      setStreak(streak + 1);
-      setSelectedGame(null);
-    }, 3000);
+  };
+
+  const handleGameComplete = (gameScore: number) => {
+    setGameScores(prev => ({ ...prev, [selectedGame!]: gameScore }));
+    setScore(score + Math.floor(gameScore / 4));
+    setStreak(gameScore >= 80 ? streak + 1 : 1);
+    
+    // Update game completion status
+    const gameIndex = games.findIndex(g => g.id === selectedGame);
+    if (gameIndex !== -1) {
+      games[gameIndex].completed = true;
+      games[gameIndex].bestScore = Math.max(games[gameIndex].bestScore, gameScore);
+    }
+    
+    setSelectedGame(null);
+  };
+
+  const handleGameExit = () => {
+    setSelectedGame(null);
   };
 
   if (selectedGame) {
-    const game = games.find(g => g.id === selectedGame);
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md text-center">
-          <CardContent className="p-8">
-            <div className="text-6xl mb-4">{game?.emoji}</div>
-            <h2 className="text-2xl font-fredoka text-foreground mb-4">
-              Playing {game?.title}
-            </h2>
-            <div className="animate-pulse">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary flex items-center justify-center">
-                <Play className="w-8 h-8 text-primary-foreground" />
-              </div>
-              <p className="text-muted-foreground">Game in progress...</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    switch (selectedGame) {
+      case 'word-match':
+        return <WordMatchingGame onComplete={handleGameComplete} onExit={handleGameExit} />;
+      case 'number-puzzle':
+        return <NumberPuzzleGame onComplete={handleGameComplete} onExit={handleGameExit} />;
+      case 'color-game':
+        return <ColorMemoryGame onComplete={handleGameComplete} onExit={handleGameExit} />;
+      default:
+        // Fallback for other games
+        const game = games.find(g => g.id === selectedGame);
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center p-4">
+            <Card className="w-full max-w-md text-center">
+              <CardContent className="p-8">
+                <div className="text-6xl mb-4">{game?.emoji}</div>
+                <h2 className="text-2xl font-fredoka text-foreground mb-4">
+                  {game?.title}
+                </h2>
+                <p className="text-muted-foreground mb-6">Coming soon! This game is being developed.</p>
+                <Button onClick={handleGameExit} variant="kid">
+                  Back to Games
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        );
+    }
   }
 
   return (

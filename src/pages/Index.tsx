@@ -5,6 +5,7 @@ import { ReadingModule } from "@/components/ReadingModule";
 import { VideoModule } from "@/components/VideoModule";
 import { GameModule } from "@/components/GameModule";
 import { ParentDashboard } from "@/components/ParentDashboard";
+import { TeacherDashboard } from "@/components/TeacherDashboard";
 
 type UserRole = 'child' | 'parent' | 'teacher' | null;
 type CurrentView = 'welcome' | 'child-dashboard' | 'parent-dashboard' | 'teacher-dashboard' | 'reading' | 'video' | 'game' | 'writing' | 'math' | 'music';
@@ -57,6 +58,9 @@ const Index = () => {
       
       case 'game':
         return <GameModule onBack={handleBackToDashboard} />;
+        
+      case 'teacher-dashboard':
+        return <TeacherDashboard onBack={() => setCurrentView('welcome')} />;
       
       case 'writing':
       case 'math':
