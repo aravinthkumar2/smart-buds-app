@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { VoiceReader } from "@/components/VoiceReader";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   ArrowLeft, 
   Volume2, 
@@ -18,6 +20,7 @@ interface ReadingModuleProps {
 }
 
 export const ReadingModule = ({ onBack }: ReadingModuleProps) => {
+  const { t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [readingSpeed, setReadingSpeed] = useState('normal');

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Baby, Users, GraduationCap } from "lucide-react";
 import owlMascot from "@/assets/owl-mascot.jpg";
 
@@ -9,6 +11,7 @@ interface WelcomeScreenProps {
 }
 
 export const WelcomeScreen = ({ onRoleSelect }: WelcomeScreenProps) => {
+  const { t } = useLanguage();
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   const roles = [

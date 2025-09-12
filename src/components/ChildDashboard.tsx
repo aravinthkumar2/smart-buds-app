@@ -2,6 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { VoiceNavigation } from "@/components/VoiceNavigation";
+import { RewardsSystem } from "@/components/RewardsSystem";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   Play, 
   BookOpen, 
@@ -18,6 +22,34 @@ interface ChildDashboardProps {
 }
 
 export const ChildDashboard = ({ onModuleSelect }: ChildDashboardProps) => {
+  const { t } = useLanguage();
+  
+  const handleVoiceCommand = (command: string) => {
+    switch (command) {
+      case 'reading':
+        onModuleSelect('reading');
+        break;
+      case 'games':
+        onModuleSelect('game');
+        break;
+      case 'video':
+        onModuleSelect('video');
+        break;
+      case 'writing':
+        onModuleSelect('writing');
+        break;
+      case 'math':
+        onModuleSelect('math');
+        break;
+      case 'music':
+        onModuleSelect('music');
+        break;
+      case 'rewards':
+        // Scroll to rewards section
+        document.getElementById('rewards-section')?.scrollIntoView({ behavior: 'smooth' });
+        break;
+    }
+  };
   const activityCards = [
     {
       id: 'video',
@@ -148,6 +180,15 @@ export const ChildDashboard = ({ onModuleSelect }: ChildDashboardProps) => {
               </div>
             </div>
           </div>
+        </div>
+        
+        {/* Rewards Section */}
+        <div id="rewards-section" className="p-4">
+          <RewardsSystem 
+            userPoints={1250}
+            userLevel={3}
+            completedActivities={['reading-story-1', 'game-word-match', 'game-number-puzzle']}
+          />
         </div>
       </div>
     </div>
