@@ -3,6 +3,9 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useToast } from '@/hooks/use-toast';
+import { generateAssessmentPDF, captureElementAsPDF, type AssessmentReport } from '@/utils/pdfExport';
+import { Download, FileText, Printer } from 'lucide-react';
 
 interface AssessmentResultsProps {
   results: {
@@ -25,10 +28,17 @@ interface AssessmentResultsProps {
       speech: number;
     };
   };
+  studentInfo?: {
+    full_name: string;
+    age?: number;
+    grade_level?: string;
+    primary_language: string;
+  };
 }
 
-export default function AssessmentResults({ results }: AssessmentResultsProps) {
-  const { t } = useLanguage();
+export default function AssessmentResults({ results, studentInfo }: AssessmentResultsProps) {
+  const { t, language } = useLanguage();
+  const { toast } = useToast();
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 80) return 'bg-red-500';
@@ -43,15 +53,100 @@ export default function AssessmentResults({ results }: AssessmentResultsProps) {
     return 'text-red-600';
   };
 
+  const handleExportPDF = async () => {
+    try {
+      if (!studentInfo) {
+        toast({
+          title: t('error'),
+          description: 'Student information is required for PDF export',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      const reportData: AssessmentReport = {
+        student: studentInfo,
+        assessment_date: new Date().toISOString(),
+        detected_disorders: results.detected_disorders,
+        overall_analysis: results.overall_analysis,
+        detailed_scores: results.detailed_scores
+      };
+
+      await generateAssessmentPDF(reportData, language);
+
+      toast({
+        title: t('success'),
+        description: t('reportExportedSuccessfully'),
+      });
+    } catch (error) {
+      console.error('PDF Export Error:', error);
+      toast({
+        title: t('error'),
+        description: t('failedToExportReport'),
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleCaptureAsPDF = async () => {
+    try {
+      const filename = `${studentInfo?.full_name?.replace(/\s+/g, '_') || 'Student'}_Assessment_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+      await captureElementAsPDF('assessment-report-content', filename);
+
+      toast({
+        title: t('success'),
+        description: t('reportExportedSuccessfully'),
+      });
+    } catch (error) {
+      console.error('PDF Capture Error:', error);
+      toast({
+        title: t('error'),
+        description: t('failedToExportReport'),
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl text-center">
-            {t('assessmentResults')}
+          <CardTitle className="text-2xl text-center flex items-center justify-between">
+            <span>{t('assessmentResults')}</span>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportPDF}
+                className="flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                {t('exportDetailedPDF')}
+              </Button>
+              <Button
+                variant="outline" 
+                size="sm"
+                onClick={handleCaptureAsPDF}
+                className="flex items-center gap-2"
+              >
+                <Download className="h-4 w-4" />
+                {t('exportVisualPDF')}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm" 
+                onClick={() => window.print()}
+                className="flex items-center gap-2"
+              >
+                <Printer className="h-4 w-4" />
+                {t('print')}
+              </Button>
+            </div>
           </CardTitle>
         </CardHeader>
       </Card>
+
+      <div id="assessment-report-content">{/* Wrap content for PDF capture */}
 
       {/* Overall Scores */}
       <Card>
@@ -221,13 +316,11 @@ export default function AssessmentResults({ results }: AssessmentResultsProps) {
 
       {/* Action Buttons */}
       <div className="flex justify-center space-x-4">
-        <Button onClick={() => window.print()} variant="outline">
-          {t('printReport')}
-        </Button>
         <Button>
           {t('startLearningPath')}
         </Button>
       </div>
+      </div>{/* End of PDF capture content */}
     </div>
   );
 }

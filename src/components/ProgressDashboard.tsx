@@ -6,13 +6,20 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import ProgressReportExport from './ProgressReportExport';
 
 interface ProgressDashboardProps {
   studentId: string;
   userRole: 'student' | 'parent' | 'teacher';
+  studentInfo?: {
+    full_name: string;
+    age?: number;
+    grade_level?: string;
+    primary_language: string;
+  };
 }
 
-export default function ProgressDashboard({ studentId, userRole }: ProgressDashboardProps) {
+export default function ProgressDashboard({ studentId, userRole, studentInfo }: ProgressDashboardProps) {
   const [analytics, setAnalytics] = useState<any>(null);
   const [progress, setProgress] = useState<any[]>([]);
   const [achievements, setAchievements] = useState<any[]>([]);
@@ -89,6 +96,18 @@ export default function ProgressDashboard({ studentId, userRole }: ProgressDashb
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
+      {/* Export Options - Only for parents and teachers */}
+      {(userRole === 'parent' || userRole === 'teacher') && studentInfo && (
+        <ProgressReportExport
+          studentInfo={studentInfo}
+          analytics={analytics}
+          progress={progress}
+          achievements={achievements}
+          reportElementId="progress-dashboard-content"
+        />
+      )}
+
+      <div id="progress-dashboard-content">{/* Wrap content for PDF export */}
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
@@ -265,6 +284,7 @@ export default function ProgressDashboard({ studentId, userRole }: ProgressDashb
           </CardContent>
         </Card>
       )}
+      </div>{/* End of PDF content */}
     </div>
   );
 }

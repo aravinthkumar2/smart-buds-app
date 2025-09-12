@@ -13,12 +13,18 @@ import AssessmentResults from './AssessmentResults';
 
 interface AssessmentModuleProps {
   studentId: string;
+  studentInfo?: {
+    full_name: string;
+    age?: number;
+    grade_level?: string;
+    primary_language: string;
+  };
   onComplete?: (results: any) => void;
 }
 
 export type AssessmentType = 'reading' | 'writing' | 'math' | 'speech';
 
-export default function AssessmentModule({ studentId, onComplete }: AssessmentModuleProps) {
+export default function AssessmentModule({ studentId, studentInfo, onComplete }: AssessmentModuleProps) {
   const [currentAssessment, setCurrentAssessment] = useState<AssessmentType>('reading');
   const [assessmentData, setAssessmentData] = useState<any>({});
   const [progress, setProgress] = useState(0);
@@ -98,7 +104,7 @@ export default function AssessmentModule({ studentId, onComplete }: AssessmentMo
   };
 
   if (isCompleted && results) {
-    return <AssessmentResults results={results} />;
+    return <AssessmentResults results={results} studentInfo={studentInfo} />;
   }
 
   const renderCurrentAssessment = () => {
