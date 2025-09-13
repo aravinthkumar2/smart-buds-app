@@ -15,6 +15,9 @@ import { useState } from "react";
 import { WordMatchingGame } from "./games/WordMatchingGame";
 import { NumberPuzzleGame } from "./games/NumberPuzzleGame";
 import { ColorMemoryGame } from "./games/ColorMemoryGame";
+import { ShapeBuilderGame } from "./games/ShapeBuilderGame";
+import { StoryQuestGame } from "./games/StoryQuestGame";
+import { MusicRhythmGame } from "./games/MusicRhythmGame";
 
 interface GameModuleProps {
   onBack: () => void;
@@ -124,6 +127,12 @@ export const GameModule = ({ onBack }: GameModuleProps) => {
         return <NumberPuzzleGame onComplete={handleGameComplete} onExit={handleGameExit} />;
       case 'color-game':
         return <ColorMemoryGame onComplete={handleGameComplete} onExit={handleGameExit} />;
+      case 'shape-builder':
+        return <ShapeBuilderGame onComplete={handleGameComplete} onExit={handleGameExit} />;
+      case 'story-quest':
+        return <StoryQuestGame onComplete={handleGameComplete} onExit={handleGameExit} />;
+      case 'music-rhythm':
+        return <MusicRhythmGame onComplete={handleGameComplete} onExit={handleGameExit} />;
       default:
         // Fallback for other games
         const game = games.find(g => g.id === selectedGame);
